@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Sensor Data</title>
+</head>
+<body>
+    <h1>Post Sensor Data</h1>
+    <form id="sensorDataForm">
+        <label for="temperature">Temperature:</label>
+        <input type="number" step="0.1" name="temperature" id="temperature" required>
+        <br>
+
+        <label for="humidity">Humidity:</label>
+        <input type="number" step="0.1" name="humidity" id="humidity" required>
+        <br>
+
+        <label for="hb">HB:</label>
+        <input type="number" step="0.1" name="hb" id="hb" required>
+        <br>
+
+        <button type="submit">Submit Data</button>
+    </form>
+
+    <script>
+        document.getElementById('sensorDataForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission
+
+            const formData = {
+                temperature: parseFloat(document.getElementById('temperature').value),
+                humidity: parseFloat(document.getElementById('humidity').value),
+                hb: parseFloat(document.getElementById('hb').value),
+            };
+
+            fetch('/data', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Data submitted successfully!');
+                    document.getElementById('sensorDataForm').reset(); // Reset form fields
+                } else {
+                    alert('Failed to submit data.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error submitting data.');
+            });
+        });
+    </script>
+</body>
+</html>
